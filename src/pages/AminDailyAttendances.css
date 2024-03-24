@@ -1,0 +1,10 @@
+/* styles.css (or your preferred style file) */
+.refresh-icon {
+    font-size: 24px; /* Adjust the size as needed */
+    transition: transform 1s ease; /* Adjust the transition duration and timing function */
+  }
+  
+  .rotate {
+    transform: rotate(360deg);
+  }
+  

@@ -1,0 +1,7 @@
+.holdable-container{
+    background-color: rgb(46, 216, 83);
+    
+}
+.holdable-container.holding {
+    background-color: #4caf50; /* Green color when holding */
+  }
