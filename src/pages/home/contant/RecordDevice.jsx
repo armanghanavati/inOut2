@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { Col, Container, Row } from "react-bootstrap";
 import Entry_ExitModal from "./Entry_ExitModal";
 import MapLocation from "./MapLocation";
+import QuestionInOutModal from "./QuestionInOutModal";
 
 const RecordDevice = () => {
   const [openMod, setOpenMod] = useState(false);
@@ -22,6 +23,8 @@ const RecordDevice = () => {
   const [type, setType] = useState(0);
   // استیت مربوط به عرض و طول جغرافیایی
   const [location, setLocation] = useState({});
+  const [showQuestionInOut, setShowQuestionInOut] = useState(false);
+  const [isQuestionInOut, setIsQuestionInOut] = useState(false);
 
   // استیت مربوط به نوع ورود و خروج
   // const[attendancetype,setAttendancetype]=useState(0)
@@ -52,86 +55,83 @@ const RecordDevice = () => {
     //   isInitialRender.current = false;
     //   return;
     // }
-    if (status) {
-      let newCreateAttendance = { ...createattendance };
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setLocation({ latitude, longitude });
-            newCreateAttendance = {
-              ...newCreateAttendance,
-              latitude,
-              longitude,
-            };
-            setCreateattendance(newCreateAttendance);
-          },
-          (error) => {
-            Swal.fire({
-              title: "Error getting geolocation",
-              text: `${error.message}`,
-              icon: "error",
-            });
-          }
-        );
-      } else {
-        Swal.fire({
-          title: "Geolocation is not supported by this browser",
-          icon: "error",
-        });
-      }
-      Swal.fire({
-        title: "ایا میخواهید ورود خروج خودرا ثبت کنید؟",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "آری!",
-        cancelButtonText: "خیر",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const token = JSON.parse(localStorage.getItem("token"));
-          const headers = {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
+    setShowQuestionInOut(true);
+    let newCreateAttendance = { ...createattendance };
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ latitude, longitude });
+          newCreateAttendance = {
+            ...newCreateAttendance,
+            latitude,
+            longitude,
           };
-          axios
-            .post(
-              "https://auto.fanwebco.com/InOut_api/api/AttendanceController/CreateAttendancy",
-              newCreateAttendance,
-              { headers: headers }
-            )
-            .then((res) =>
-              !res.data.res
-                ? Swal.fire({
-                    title: `${res.data.msg}`,
-                    text: "ورود یا خروج شما ثبت نشد",
-                    icon: "error",
-                  })
-                : Swal.fire({
-                    // title:`${res.data.msg}`,
-                    title: "ورود یا خروج شما ثبت شد",
-                    icon: "success",
-                  })
-            )
-            .catch((err) =>
-              Swal.fire({
-                text: `${err.message}`,
-                icon: "error",
-              })
-            );
-        } else {
+          setCreateattendance(newCreateAttendance);
+        },
+        (error) => {
           Swal.fire({
-            title: "ورود خروج شما ثبت نشد",
+            title: "Error getting geolocation",
+            text: `${error.message}`,
             icon: "error",
           });
         }
+      );
+    } else {
+      Swal.fire({
+        title: "موقعیت شما یافت نشد",
+        icon: "error",
       });
     }
+    // Swal.fire({
+    //   title: "ایا میخواهید ورود خروج خودرا ثبت کنید؟",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "آری!",
+    //   cancelButtonText: "خیر",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     const token = JSON.parse(localStorage.getItem("token"));
+    //     const headers = {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     };
+    //     axios
+    //       .post(
+    //         "https://auto.fanwebco.com/InOut_api/api/AttendanceController/CreateAttendancy",
+    //         newCreateAttendance,
+    //         { headers: headers }
+    //       )
+    //       .then((res) =>
+    //         !res.data.res
+    //           ? Swal.fire({
+    //               title: `${res.data.msg}`,
+    //               text: "ورود یا خروج شما ثبت نشد",
+    //               icon: "error",
+    //             })
+    //           : Swal.fire({
+    //               // title:`${res.data.msg}`,
+    //               title: "ورود یا خروج شما ثبت شد",
+    //               icon: "success",
+    //             })
+    //       )
+    //       .catch((err) =>
+    //         Swal.fire({
+    //           text: `${err.message}`,
+    //           icon: "error",
+    //         })
+    //       );
+    //   } else {
+    //     Swal.fire({
+    //       title: "ورود خروج شما ثبت نشد",
+    //       icon: "error",
+    //     });
+    //   }
+    // });
   }, [status]);
 
-
-  
   useEffect(() => {
     if (status === "login" && type === 0) {
       setCreateattendance({ ...createattendance, attendanceType: 0 });
@@ -425,7 +425,7 @@ const RecordDevice = () => {
                       name="in"
                       control={control}
                       onChange={enterclick}
-                      checked={status === "login" ? true : false}
+                      checked={!!isQuestionInOut ? false : true}
                       value="login"
                       className="sr-only peer"
                       label="ورود"
@@ -473,6 +473,14 @@ const RecordDevice = () => {
           setType={setType}
           openMod={openMod}
           setOpenMod={setOpenMod}
+        />
+      )}
+      {showQuestionInOut && (
+        <QuestionInOutModal
+          setIsQuestionInOut={setIsQuestionInOut}
+          createattendance={createattendance}
+          showQuestionInOut={showQuestionInOut}
+          setShowQuestionInOut={setShowQuestionInOut}
         />
       )}
     </>
