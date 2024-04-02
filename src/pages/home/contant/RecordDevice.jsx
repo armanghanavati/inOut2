@@ -46,12 +46,12 @@ const RecordDevice = () => {
     // دریافت طول و عرض جغرافیایی
   });
 
-  const isInitialRender = useRef(true);
+  // const isInitialRender = useRef(true);
   useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
+    // if (isInitialRender.current) {
+    //   isInitialRender.current = false;
+    //   return;
+    // }
     if (status) {
       let newCreateAttendance = { ...createattendance };
       if (navigator.geolocation) {
@@ -129,6 +129,9 @@ const RecordDevice = () => {
       });
     }
   }, [status]);
+
+
+  
   useEffect(() => {
     if (status === "login" && type === 0) {
       setCreateattendance({ ...createattendance, attendanceType: 0 });
@@ -260,11 +263,12 @@ const RecordDevice = () => {
     }, 1000);
   };
   useEffect(now, []);
+
   const enterclick = (e) => {
     console.log(e);
     var newStatus;
     getCurrenttime();
-    if (!status) {
+    if (!!!status) {
       newStatus = "login";
       setStatus("login");
     } else if (status === "logout") {
@@ -359,8 +363,6 @@ const RecordDevice = () => {
     }
   };
 
-  console.log(location);
-
   return (
     <>
       <Container fluid>
@@ -421,8 +423,7 @@ const RecordDevice = () => {
                   <label className="relative inline-flex items-center cursor-pointer">
                     <SwitchCase
                       name="in"
-                      control={control}                      
-                      isValid={status === "login" && true}
+                      control={control}
                       onChange={enterclick}
                       checked={status === "login" ? true : false}
                       value="login"

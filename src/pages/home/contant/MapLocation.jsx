@@ -9,10 +9,10 @@ const MapLocation = ({ location, setLocation }) => {
   const mediaMd = useMediaQuery({ query: "(max-width: 750px)" });
   const mediaXl = useMediaQuery({ query: "(max-width: 990px)" });
 
-  const position = [location?.longitude,location?.latitude ];
+  const position = [location?.longitude, location?.latitude];
   const tokenMapir =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjUzODgyOWQ5ZjJkNzI4MDg2YTlhODRmMjI0ZGNhMThmOTQwMDNkOThkNmNhYTFmNmNlYTY2MjEzNzYzYmFkYzY4ZmEzMzZlYTlmMGQzMjEwIn0.eyJhdWQiOiIyNjY5NSIsImp0aSI6IjUzODgyOWQ5ZjJkNzI4MDg2YTlhODRmMjI0ZGNhMThmOTQwMDNkOThkNmNhYTFmNmNlYTY2MjEzNzYzYmFkYzY4ZmEzMzZlYTlmMGQzMjEwIiwiaWF0IjoxNzEwNjI3NjE3LCJuYmYiOjE3MTA2Mjc2MTcsImV4cCI6MTcxMzA0NjgxNywic3ViIjoiIiwic2NvcGVzIjpbImJhc2ljIl19.Whouv1KCk23Xt7-sV-cIBN23x60H6YjsO-G_QUzgekCzOCyVvPAZ6QM34dC2lkMtIEy6PxU29pO4nY2xvKG1OI-RmEByezDunNFhFNR1O42gtZYRa9SPmTXkeRJ_P9eQoNVqO8ls32kqtpTzVNvCJsvKuL9Z1EQXjEigRXbIl17W8xffB0u6Dqdr0K0enSsPp-AVH-igugxrtYh1ZNWQkndmv0XSsjbzTTof_ZYOw6iM5hJ8CpP1iWu8uTjxF0ICcSwrlRTXGqBdpfXSDfaFVeaA3YfHpzdqmkVB_k_vxLVsv_X3robVUWvV9DRwgagrkZJx_W2cHgPF1ArsmskV-g";
-    
+
   const Map = Mapir.setToken({
     transformRequest: (url) => {
       return {
