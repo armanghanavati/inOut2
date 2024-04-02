@@ -26,7 +26,6 @@ const TabsBase = () => {
         </Tabs>
       </Col>*/}
       <MainTitle label="ثبت ورود و خروج" />
-
       <RecordDevice location={location} setLocation={setLocation} />
     </>
   );

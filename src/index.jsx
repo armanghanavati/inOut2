@@ -7,6 +7,7 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { MyProvider } from "./components/contextProvider/MyContext";
 import "mapir-react-component/dist/index.css";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,19 +20,32 @@ root.render(
     {/* </HashRouter> */}
   </>
 );
-<script>
-  if ('serviceWorker' in navigator){" "}
-  {window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((registration) => {
-        console.log(
-          "Service Worker registered with scope:",
-          registration.scope
-        );
+serviceWorkerRegistration.register();
+
+// if ("serviceWorker" in navigator) {
+//   window.addEventListener("load", () => {
+//     navigator.serviceWorker
+//       .register("/service-worker.js")
+//       .then((registration) => {
+//         console.log(
+//           "Service Worker registered with scope:",
+//           registration.scope
+//         );
+//       })
+//       .catch((error) => {
+//         console.error("Service Worker registration failed:", error);
+//       });
+//   });
+// }
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator?.serviceWorker?.register('/service-worker.js')
+      .then(registration => {
+        console.log('Service Worker registered:', registration);
       })
-      .catch((error) => {
-        console.error("Service Worker registration failed:", error);
+      .catch(error => {
+        console.error('Service Worker registration failed:', error);
       });
-  })}
-</script>;
+  });
+}

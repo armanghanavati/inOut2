@@ -22,3 +22,15 @@ export const getWeatherMap = () => {
 export const getUserRole = () => {
   return axios.post(`${baseURL}api/Account/UserDetailsToken`, null);
 };
+
+// All User Leaves Requeset
+export const allUserLeavesRequeset = () => {
+  return axios.post(`${baseURL}api/LeaveManagementController/AllUserLeavesRequeset`);
+};
+
+// users Summary Report Monthly
+export const usersSummaryReportMonthly = (postData) => {
+  return axios.post(`${baseURL}api/ReportController/UsersSummaryReportMonthly` ,postData);
+};
+
+

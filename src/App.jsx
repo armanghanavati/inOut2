@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Setting from "./pages/Setting";
 import About from "./pages/About";
-import Reportdetailed from "./pages/Reportdetailed";
-import Reportsummary from "./pages/Reportsummary";
-import Reporteddetailed from "./pages/Reporteddetailed";
+// import Reportdetailed from "./pages/Reportdetailed";
+// import Reportsummary from "./pages/Reportsummary";
+// import Reporteddetailed from "./pages/Reporteddetailed";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Request from "./pages/Request";
@@ -57,8 +57,6 @@ function App() {
   //   }
   // };
 
-  console.log("Hello worid");
-
   return (
     <>
       {/* <QueryClientProvider client={queryClient}> */}
@@ -76,9 +74,9 @@ function App() {
           <Route
             path="/"
             element={
-              <GeneralLayout>
+              <PrivateLayout>
                 <Home />
-              </GeneralLayout>
+              </PrivateLayout>
             }
           />
           <Route path="/login" element={<Login />} />

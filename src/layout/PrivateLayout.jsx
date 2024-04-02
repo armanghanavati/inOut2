@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import MyNavabar from "../components/MyNavabar/MyNavabar";
 import { Col, Collapse, Container, Row } from "react-bootstrap";
@@ -6,11 +6,34 @@ import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import SideBar from "../pages/home/sidebar";
 import Swal from "sweetalert2";
+import { getUserRole } from "../services/MasterServices";
+import { useMyContext } from "../components/contextProvider/MyContext";
 
 const PrivateLayout = ({ children }) => {
-  const navigate = useNavigate();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
   const [showSide, setShowSide] = useState(false);
+  const {setUserRole} = useMyContext()
+
+  const handleUserRole = async () => {
+    try {
+      const res = await getUserRole();
+      if (res?.data?.res === 1) {
+        console.log(res);
+        setUserRole(res?.data?.model);
+      } else {
+        Swal.fire({
+          text: res?.data?.err,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleUserRole()
+  }, [])
 
   // const logHandler = () => {
   //   Swal.fire({
@@ -50,7 +73,7 @@ const PrivateLayout = ({ children }) => {
               <div className="showIcon containerSideAnimatOff sitShowSideIcon mt">
                 <i
                   onClick={() => setShowSide(!showSide)}
-                  className="px-2 py-4 baseBtn font20 bi cursorPointer bi-chevron-double-left text-white rounded-start-4"
+                  className="d-flex align-items-center px-2 py-4 baseBtn font20 bi cursorPointer bi-chevron-double-left text-white rounded-start-4"
                 />
               </div>
             </>
@@ -58,7 +81,7 @@ const PrivateLayout = ({ children }) => {
           {isSmallScreen ? (
             <Collapse
               in={showSide}
-              className="col-6 col-sm-5 col-md-3"
+              className="col-8 col-sm-5 col-md-3"
               dimension="width"
             >
               <Row className="containerSideAnimat">

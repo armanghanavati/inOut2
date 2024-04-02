@@ -4,13 +4,6 @@ import persianCalendar from "react-date-object/calendars/persian";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { Controller } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../hooks/hook";
-import {
-    RsetIsDisable,
-    RsetIsReqStepsDate,
-    selectIsReqStepsDate,
-    selectPerStatusFields,
-} from "./slices/taxSlice";
 import "react-multi-date-picker/styles/layouts/mobile.css";
 import "react-multi-date-picker/styles/colors/green.css";
 import { useMediaQuery } from "react-responsive";
@@ -30,6 +23,8 @@ const Datepicker = ({
     normal = true,
     isDisabled = false,
     validation,
+    format,
+    onlyMonthPicker,
     control,
     errmsg = "",
     className,
@@ -42,6 +37,7 @@ const Datepicker = ({
     important,
     register,
     errors,
+    range,
 }) => {
     // const [calendar, setCalendar] = useState("");
 
@@ -83,6 +79,8 @@ const Datepicker = ({
                                 {label}
                             </Form.Label>
                             <DatePicker
+                            format={format}
+                            onlyMonthPicker={onlyMonthPicker}
                                 weekDays={weekDays}
                                 className={`input-form green ${isSmallScreen && "rmdp-mobile"
                                     } ${ltr ? " dir-ltr " : ""} ${className} `}
@@ -93,20 +91,21 @@ const Datepicker = ({
                                 onChange={field?.onChange}
                                 minDate={minDate}
                                 maxDate={maxDate}
+                                range={range}
                                 monthYearSeparator={" "}
                                 inputClass={`form-control dir-ltr  ${errors?.[name] && "border border-danger"
                                     } ${className}  `}
                                 calendar={persianType === "per" ? persianCalendar : undefined}
                                 locale={persianType === "per" ? persian_fa : undefined}
                             >
-                                <Button
+                                {/* <Button
                                     variant="outline-success"
                                     className="mb-2"
                                     style={{ margin: "5px" }}
                                     onClick={() => field?.onChange(null)}
                                 >
                                     لغو انتخاب
-                                </Button>
+                                </Button> */}
                             </DatePicker>
                             {errors?.[name] && (
                                 <span className="text-danger font12">

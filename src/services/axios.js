@@ -6,7 +6,6 @@ import axios from "axios";
 axios.interceptors.request.use(
   function (config) {
     console.log(config);
-    console.log(!!localStorage.getItem("tokenId"));
     if (!!localStorage.getItem("tokenId")) {
       config.headers.Authorization = `Bearer ${localStorage.getItem(
         "tokenId"
@@ -27,6 +26,7 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
+    console.log(error);
     if (error?.config?.headers?.Authorization === "Bearer null") {
       localStorage.clear();
       window.location = "/login";

@@ -17,6 +17,7 @@ import {
 } from "../../services/MasterServices";
 import logo from "../../asset/logo.jpg";
 import Swal from "sweetalert2";
+import { useMyContext } from "../../components/contextProvider/MyContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,21 +28,20 @@ const Login = () => {
     formState: { errors },
     getValues,
   } = useForm({ reValidateMode: "onChange" });
+  const { setUserRole } = useMyContext();
   const [userData, setUserData] = useLocalStorageState("userData", "");
-  const [token, setToken] = useLocalStorageState("token", "");
-  const [userRole, setUserRole] = useLocalStorageState("userRole", "");
 
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    const userRole = JSON.parse(localStorage.getItem("userRole"));
-    if (token && userRole === "Admin") {
-      navigate("/adminlogin");
-    } else if (token && userRole === "User") {
-      navigate("/home");
-    } else {
-      console.log("hi");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = JSON.parse(localStorage.getItem("token"));
+  //   const userRole = JSON.parse(localStorage.getItem("userRole"));
+  //   if (token && userRole === "Admin") {
+  //     navigate("/adminlogin");
+  //   } else if (token && userRole === "User") {
+  //     navigate("/home");
+  //   } else {
+  //     console.log("hi");
+  //   }
+  // }, []);
 
   useEffect(() => {
     AOS.init();
@@ -60,6 +60,11 @@ const Login = () => {
         localStorage.setItem("tokenId", res?.data?.jwtToken);
         localStorage.setItem("userRole", res?.data?.userRole);
         navigate("/user/home");
+      }else {
+        Swal.fire({
+          text: res?.data?.err,
+          icon: "error",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -80,9 +85,9 @@ const Login = () => {
   const handleUserRole = async () => {
     try {
       const res = await getUserRole();
-      console.log(res);
       if (res?.data?.res === 1) {
         setUserData(res?.data?.model);
+        setUserRole(res?.data?.model);
       } else {
         Swal.fire({
           text: "از اتصال اینترنت اطمینان حاصل نمایید",

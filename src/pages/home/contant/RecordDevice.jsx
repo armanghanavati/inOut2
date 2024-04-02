@@ -4,13 +4,20 @@ import moment from "jalali-moment";
 import useLocalStorageState from "use-local-storage-state";
 import axios from "axios";
 import Swal from "sweetalert2";
+import SwitchCase from "../../../components2/CheckBox";
+import { useForm } from "react-hook-form";
+import { Col, Container, Row } from "react-bootstrap";
+import Entry_ExitModal from "./Entry_ExitModal";
+import MapLocation from "./MapLocation";
 
 const RecordDevice = () => {
-  const [pop, setPop] = useState(false);
-
+  const [openMod, setOpenMod] = useState(false);
+  const {
+    control,
+    formState: { errors },
+  } = useForm({ reValidateMode: "onChange" });
   //   استیت استاتوس برای ورود و خروج کاربر است که یعنی ورود کرده یا خروج کرده
   const [status, setStatus] = useLocalStorageState("status", "");
-
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
   const [type, setType] = useState(0);
   // استیت مربوط به عرض و طول جغرافیایی
@@ -254,6 +261,7 @@ const RecordDevice = () => {
   };
   useEffect(now, []);
   const enterclick = (e) => {
+    console.log(e);
     var newStatus;
     getCurrenttime();
     if (!status) {
@@ -300,6 +308,7 @@ const RecordDevice = () => {
       setCreateattendance({ ...createattendance, attendanceType: 5 });
     }
   };
+
   const outclick = (e) => {
     let newStatus;
     getCurrenttime();
@@ -349,161 +358,122 @@ const RecordDevice = () => {
       setCreateattendance({ ...createattendance, attendanceType: 5 });
     }
   };
+
+  console.log(location);
+
   return (
     <>
-      <div>
-        <div className="time w-[200px] h-[200px] mx-auto rounded-full bg-purple-100 mt-32 p-5 flex flex-col justify-center items-center gap-y-4">
+      <Container fluid>
+        <Row className="d-flex text-center">
           <p className="font-bold text-xl">{saat}</p>
           <p>{`   ${weekday}, ${persianDay} ${monthName}`} </p>
-          <p>قزوین</p>
-          <div className="flex items-center justify-center gap-x-2">
-            <p>13°C</p>
-            <BsSun />
-          </div>
-        </div>
-        <div className="flex items-center justify-center mt-5">
-          {location.latitude ? (
-            <div>
-              <p>عرض جغرافیایی: {location.latitude}</p>
-              <p>طول جغرافیایی: {location.longitude}</p>
-              <p className="text-green-500">لوکیشن شما با موفقیت دریافت شد</p>
-            </div>
-          ) : (
-            <p></p>
-          )}
-        </div>
-
-        <div className="mt-20 text-center text-sm  mb-7 border p-3 bg-purple-100 rounded-full w-[60%] mx-auto">
-          {status && location.latitude && location.longitude ? (
-            <span className="font-bold">
-              {status === "login" && type === 0 && (
-                <span className="text-green-500"> ورود </span>
-              )}
-              {status === "logout" && type === 0 && (
-                <span className="text-red-500"> خروج </span>
-              )}
-              {status === "login" && type === 1 && (
-                <span className="text-green-500"> ورود با مرخصی </span>
-              )}
-              {status === "logout" && type === 1 && (
-                <span className="text-red-500"> خروج با مرخصی </span>
-              )}
-              {status === "login" && type === 2 && (
-                <span className="text-red-500"> ورود با ماموریت </span>
-              )}
-              {status === "logout" && type === 2 && (
-                <span className="text-red-500"> خروج با مرخصی </span>
-              )}
-              در ساعت {currentTime}
-            </span>
-          ) : null}
-        </div>
-
-        <div className="my-5 mx-auto text-center">
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              onClick={enterclick}
-              checked={status === "login" ? true : false}
-              value="login"
-              className="sr-only peer"
-            />
-            <div className="w-20 h-10 bg-gray-200 peer-focus:outline-none peer-focus:ring-4   rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-9 after:w-9 after:transition-all peer-checked:bg-green-600"></div>
-            <span className="ms-3 text-sm font-bold text-gray-900 ">ورود </span>
-          </label>
-        </div>
-        <div className=" mx-auto text-center  ">
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              onClick={outclick}
-              checked={status === "logout" ? true : false}
-              value="logout"
-              className="sr-only peer"
-            />
-            <div className="w-20 h-10 bg-gray-200 peer-focus:outline-none peer-focus:ring-4   rounded-full peer  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-9 after:w-9 after:transition-all peer-checked:bg-green-600"></div>
-            <span className="ms-3 text-sm font-bold text-gray-900 ">خروج </span>
-          </label>
-        </div>
-        <div
-          onClick={() => setPop(true)}
-          className="cursor-pointer w-[65%] text-center  rounded-full text-white bg-purple-500 mx-auto mt-5 py-2 px-5 mb-4"
-        >
-          انتخاب نوع ورود و خروج
-        </div>
-      </div>
+        </Row>
+        <hr />
+        <Container fluid className="">
+          <Row>
+            <Col className="" md="6">
+              <Col md="12">
+                {!!location?.longitude && (
+                  <MapLocation location={location} setLocation={setLocation} />
+                )}
+              </Col>
+              <Col md="12">
+                <div className="d-flex items-center justify-content-center mt-5">
+                  {location.latitude ? (
+                    <div>
+                      <p>عرض جغرافیایی: {location.latitude}</p>
+                      <p>طول جغرافیایی: {location.longitude}</p>
+                    </div>
+                  ) : (
+                    <p></p>
+                  )}
+                </div>
+              </Col>
+            </Col>
+            <Col className="" md="6">
+              {status && location.latitude && location.longitude ? (
+                <div className="mt-5 text-center text-sm  mb-4 border p-3 bg-light rounded-2 w-50 mx-auto">
+                  <span className="font-bold">
+                    {status === "login" && type === 0 && (
+                      <span className="text-success"> ورود </span>
+                    )}
+                    {status === "logout" && type === 0 && (
+                      <span className="text-danger"> خروج </span>
+                    )}
+                    {status === "login" && type === 1 && (
+                      <span className="text-white"> ورود با مرخصی </span>
+                    )}
+                    {status === "logout" && type === 1 && (
+                      <span className="text-white"> خروج با مرخصی </span>
+                    )}
+                    {status === "login" && type === 2 && (
+                      <span className="text-white"> ورود با ماموریت </span>
+                    )}
+                    {status === "logout" && type === 2 && (
+                      <span className="text-white"> خروج با مرخصی </span>
+                    )}
+                    در ساعت {currentTime}
+                  </span>
+                </div>
+              ) : null}
+              <Col className="" md="12">
+                <div className=" mx-auto text-center">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <SwitchCase
+                      name="in"
+                      control={control}                      
+                      isValid={status === "login" && true}
+                      onChange={enterclick}
+                      checked={status === "login" ? true : false}
+                      value="login"
+                      className="sr-only peer"
+                      label="ورود"
+                    />
+                  </label>
+                </div>
+                <div className=" mx-auto text-center  ">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <SwitchCase
+                      control={control}
+                      name="out"
+                      onChange={outclick}
+                      checked={status === "logout" ? true : false}
+                      value="logout"
+                      className="sr-only peer"
+                      label="خروج"
+                    />
+                  </label>
+                </div>
+              </Col>
+              <Row className="">
+                <Col md="12" xl="12" xxl="12">
+                  <div
+                    onClick={() => setOpenMod(true)}
+                    className="cursorPointer w-50 rounded-2 text-center text-white bg-dark mx-auto mt-5 py-2 mb-4"
+                  >
+                    انتخاب نوع ورود و خروج
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </Container>
       <div
-        className={
-          "fixed  z-[10] top-48 right-5 left-5 bg-zinc-100 rounded-lg overflow-hidden pb-5 " +
-          (pop ? " visible " : " invisible")
-        }
-      >
-        <div className=" w-full text-center px-5 py-2 bg-purple-500 font-bold  text-white ">
-          انتخاب نوع ورود و خروج
-        </div>
-        <div className="flex flex-col mt-4 gap-y-3 px-5">
-          <button
-            onClick={() => setType(0)}
-            className={
-              "border rounded-xl  text-center py-2 border-purple-500 my-2 mx-2" +
-              (!type ? "  text-white bg-purple-500" : " text-black bg-white")
-            }
-          >
-            ورود و خروج به صورت عادی
-          </button>
-          <button
-            onClick={() => setType(1)}
-            className={
-              "border rounded-xl  text-center py-2 border-purple-500 my-2 mx-2" +
-              (type == 1
-                ? "  text-white bg-purple-500"
-                : " text-black bg-white")
-            }
-          >
-            ورود و خروج با مرخصی
-          </button>
-          <button
-            onClick={() => setType(2)}
-            className={
-              "border rounded-xl  text-center py-2 border-purple-500 my-2 mx-2" +
-              (type == 2
-                ? "  text-white bg-purple-500"
-                : " text-black bg-white")
-            }
-          >
-            {" "}
-            ورود و خروج با ماموریت
-          </button>
-        </div>
-        <div className="flex items-center justify-center gap-x-3 px-5 mb-3 mt-4">
-          <button
-            onClick={() => {
-              setType(type);
-              setPop(false);
-            }}
-            className="rounded-2xl  border border-black  w-1/2 px-4 py-1"
-          >
-            اعمال
-          </button>
-          <button
-            onClick={() => {
-              setType(0);
-              setPop(false);
-            }}
-            className="rounded-2xl  border border-black  w-1/2 px-4 py-1"
-          >
-            لغو
-          </button>
-        </div>
-      </div>
-      {/* overlay */}
-      <div
-        onClick={() => setPop(false)}
+        onClick={() => setOpenMod(false)}
         className={
           "overlay fixed h-screen w-screen top-0 right-0 left-0 bottom-0 bg-black/80 z-[9]" +
-          (pop ? " opacity-100 visible" : " invisible opacity-0 ")
+          (openMod ? " opacity-100 visible" : " invisible opacity-0 ")
         }
       ></div>
+      {openMod && (
+        <Entry_ExitModal
+          type={type}
+          setType={setType}
+          openMod={openMod}
+          setOpenMod={setOpenMod}
+        />
+      )}
     </>
   );
 };
@@ -534,16 +504,6 @@ const RecordDevice = () => {
 //         </Toast>
 //       </Col>
 //     </Row>
-//   );
-// }
-// {
-//   openMod && (
-//     <Entry_ExitModal
-//       type={type}
-//       setType={setType}
-//       openMod={openMod}
-//       setOpenMod={setOpenMod}
-//     />
 //   );
 // }
 

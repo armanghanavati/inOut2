@@ -25,10 +25,6 @@ code {
     monospace;
 }
 
-/* date picker */
-.rmdp-arrow {
-  display: none !important;
-}
 /* --------------------------------------------------------------------- */
 .text-purple {
   color: #3a3663;
@@ -47,11 +43,11 @@ display: none !important;
 } 
 
 .maxW-400px{
-  max-width: 400px;
+  max-width: 400px !important;
 }
 
 .maxH-400{
-  max-height: 400px;
+  max-height: 400px !important;
 }
 
 .bg-purple {
@@ -68,10 +64,19 @@ display: none !important;
   max-height: 500px;
 }
 
-@media only screen and (min-width: 400px) {
+@media only screen and (min-width: 370px) and (max-width: 659px) {
   .fitMap {
     min-height: 300px;
     max-height: 500px;
+    max-width: 355px;
+  }
+}
+
+@media only screen and (min-width: 660px) and (max-width: 991px) {
+  .fitMap {
+    min-height: 300px;
+    max-height: 500px;
+    max-width: 650px;
   }
 }
 
@@ -1360,14 +1365,15 @@ button {
 }
 
 .sitShowSideIcon {
-  position: absolute;
+  position: fixed;
   right: 100%;
   top: 65px;
 }
 
 .containerSideAnimat {
   z-index: 1000;
-  position: absolute;
+  position: fixed;
+  top: 0;
   transform: translateX(-10px);
 }
 
