@@ -13,10 +13,7 @@ import QuestionInOutModal from "./QuestionInOutModal";
 
 const RecordDevice = () => {
   const [openMod, setOpenMod] = useState(false);
-  const {
-    control,
-    formState: { errors },
-  } = useForm({ reValidateMode: "onChange" });
+
   //   استیت استاتوس برای ورود و خروج کاربر است که یعنی ورود کرده یا خروج کرده
   const [status, setStatus] = useLocalStorageState("status", "");
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
@@ -154,34 +151,8 @@ const RecordDevice = () => {
     if (status === "logout" && type === 2) {
       setCreateattendance({ ...createattendance, attendanceType: 5 });
     }
-
     // }
   }, [type, status]);
-
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token,
-    };
-    axios
-      .post(
-        "https://www.auto.fanwebco.com/InOut_api/api/Account/UserDetailsToken",
-        {},
-        { headers: headers }
-      )
-      .then((res) => setUserData(res.data.model))
-      .catch((error) =>
-        Swal.fire({
-          text: "از اتصال اینترنت اطمینان حاصل نمایید",
-          icon: "error",
-        })
-      );
-  }, []);
-
-  useEffect(() => {
-    console.log(loginRef);
-  }, [loginRef]);
 
   useEffect(() => {
     moment.locale("fa");
@@ -224,7 +195,6 @@ const RecordDevice = () => {
       }, 300);
     }
   }, [enterUser, outUser]);
-  // پایان تقویم شمسی
 
   // تابع گت کارنت تایم ساعت دقیق لحظه ورود ولحظه خروج کاربر را ثبت میکند
   const getCurrenttime = (e) => {
@@ -245,11 +215,9 @@ const RecordDevice = () => {
     }, 1000);
   };
 
-  useEffect(now, []);
+  useEffect(() => { now() }, []);
 
   const handleEnterClick = (e) => {
-
-    console.log(e);
     setShowQuestionInOut(true);
     var newStatus;
     getCurrenttime();
@@ -364,9 +332,7 @@ const RecordDevice = () => {
           <Row>
             <Col className="" md="6">
               <Col md="12">
-                {!!location?.longitude && (
-                  <MapLocation location={location} setLocation={setLocation} />
-                )}
+                <MapLocation location={location} setLocation={setLocation} />
               </Col>
               <Col md="12">
                 <div className="d-flex items-center justify-content-center mt-5">

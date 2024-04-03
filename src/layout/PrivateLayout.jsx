@@ -12,7 +12,7 @@ import { useMyContext } from "../components/contextProvider/MyContext";
 const PrivateLayout = ({ children }) => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
   const [showSide, setShowSide] = useState(false);
-  const {setUserRole} = useMyContext()
+  const { setUserRole, userLocation, setUserLocation } = useMyContext()
 
   const handleUserRole = async () => {
     try {
@@ -26,42 +26,34 @@ const PrivateLayout = ({ children }) => {
           icon: "error",
         });
       }
+
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleGetLocation = () => {
+    const interval = setInterval(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error("Error getting geolocation:", error.message);
+          }
+        );
+      }
+      return () => clearInterval(interval);
+    }, 2000);
+
+  }
+
   useEffect(() => {
     handleUserRole()
+    handleGetLocation()
   }, [])
-
-  // const logHandler = () => {
-  //   Swal.fire({
-  //     title: " آیا برای خروج از اپلیکیشن اطمینان دارید؟",
-  //     icon: "warning",
-  //     width: "300px",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "green",
-  //     cancelButtonColor: "red",
-  //     confirmButtonText: "بله",
-  //     fontSize: "50px",
-  //     cancelButtonText: "خیر",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       //   window.location.reload(true)
-  //       localStorage.clear();
-
-  //       Swal.fire({
-  //         title: "شما با موفقیت از پروفایل خود خارج شدید!",
-  //         icon: "success",
-  //         width: "250px",
-  //       });
-  //       navigate("/login");
-
-  //       setOpen(false);
-  //     }
-  //   });
-  // };
 
   return (
     <>

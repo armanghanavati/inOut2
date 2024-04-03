@@ -5,6 +5,7 @@ export const MyProvider = ({ children }) => {
   const [sharedMonth, setSharedMonth] = useState([""]);
   const [sharedYear, setSharedYear] = useState([""]);
   const [userRole, setUserRole] = useState({});
+  const [userLocation, setUserLocation] = useState({});
 
   return (
     <MyContext.Provider
@@ -15,6 +16,7 @@ export const MyProvider = ({ children }) => {
         setSharedYear,
         userRole,
         setUserRole,
+        userLocation, setUserLocation
       }}
     >
       {children}

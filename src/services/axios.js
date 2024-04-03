@@ -26,8 +26,7 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log(error);
-    if (error?.config?.headers?.Authorization === "Bearer null") {
+    if (!!!error?.config?.headers?.Authorization || error?.config?.headers?.Authorization === "Bearer null") {
       localStorage.clear();
       window.location = "/login";
     }
