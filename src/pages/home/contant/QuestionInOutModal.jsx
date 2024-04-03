@@ -35,6 +35,7 @@ const QuestionInOutModal = ({
       style={{ display: "block", position: "initial" }}
     >
       <Modal
+        centered
         show={showQuestionInOut}
         onHide={() => setShowQuestionInOut(false)}
       >

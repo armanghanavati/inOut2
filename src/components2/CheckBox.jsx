@@ -12,11 +12,15 @@ const SwitchCase = ({
   control,
   checkBox = false,
   defaultChecked,
+  value,
+  ref
 }) => {
   return (
     <>
       <Col className=" d-flex align-items-end">
         <Form.Check
+          value={value}
+          ref={ref}
           defaultChecked={defaultChecked}
           isValid={isValid}
           className={`d-flex justify-content-center mb-1 cursorPointer ${className}`}

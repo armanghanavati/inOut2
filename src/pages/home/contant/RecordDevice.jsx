@@ -25,12 +25,15 @@ const RecordDevice = () => {
   const [location, setLocation] = useState({});
   const [showQuestionInOut, setShowQuestionInOut] = useState(false);
   const [isQuestionInOut, setIsQuestionInOut] = useState(false);
+  const [enterUser, setEnterUser] = useState(false);
+  const [outUser, setOutUser] = useState(false);
 
   // استیت مربوط به نوع ورود و خروج
   // const[attendancetype,setAttendancetype]=useState(0)
 
   const [currentTime, setCurrenttime] = useLocalStorageState("currenttime", "");
   const [saat, setSaat] = useState("");
+  const loginRef = useRef()
   // تقویم شمسی
   const [persianYear, setPersianYear] = useState("");
   const [persianMonth, setPersianMonth] = useState("");
@@ -55,7 +58,7 @@ const RecordDevice = () => {
     //   isInitialRender.current = false;
     //   return;
     // }
-    setShowQuestionInOut(true);
+
     let newCreateAttendance = { ...createattendance };
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -154,45 +157,6 @@ const RecordDevice = () => {
 
     // }
   }, [type, status]);
-  // تابع استاتوس هندلرر مشخص میکند که تابع ورود کرده یا خروج کرده
-  // const statusHandler=(e)=>{
-  //     if (navigator.geolocation) {
-  //             navigator.geolocation.getCurrentPosition(
-  //             (position) => {
-  //                 const { latitude, longitude } = position.coords;
-  //                 setLocation({latitude, longitude} );
-  //                 setCreateattendance({...createattendance,latitude,longitude})
-  //             },
-  //             (error) => {
-  //                 console.error('Error getting geolocation:', error.message);
-  //             }
-  //             );
-  //         }
-  //         else {
-  //             console.error('Geolocation is not supported by this browser.');
-  //         }
-  //     const newStatus = e.target.value;
-  //         setStatus(newStatus);
-
-  //         if (newStatus === 'login' && type === 0) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 0 });
-  //         }
-  //         if (newStatus === 'logout' && type === 0) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 1 });
-  //         }
-  //         if (newStatus === 'login' && type === 1) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 2 });
-  //         }
-  //         if (newStatus === 'logout' && type === 1) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 3 });
-  //         }
-  //         if (newStatus === 'login' && type === 2) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 4 });
-  //         }
-  //         if (newStatus === 'logout' && type === 2) {
-  //             setCreateattendance({ ...createattendance, attendanceType: 5 });
-  //     }
-  // }
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token"));
@@ -214,6 +178,10 @@ const RecordDevice = () => {
         })
       );
   }, []);
+
+  useEffect(() => {
+    console.log(loginRef);
+  }, [loginRef]);
 
   useEffect(() => {
     moment.locale("fa");
@@ -242,6 +210,20 @@ const RecordDevice = () => {
     setPersianMonth(month);
     setPersianDay(day);
   }, []);
+
+  useEffect(() => {
+    if (enterUser) {
+      setTimeout(() => {
+        console.log("Hello owordl");
+        setEnterUser(false)
+      }, 300);
+    }
+    if (outUser) {
+      setTimeout(() => {
+        setOutUser(false)
+      }, 300);
+    }
+  }, [enterUser, outUser]);
   // پایان تقویم شمسی
 
   // تابع گت کارنت تایم ساعت دقیق لحظه ورود ولحظه خروج کاربر را ثبت میکند
@@ -262,16 +244,21 @@ const RecordDevice = () => {
       setSaat(`${minutes} : ${hours}`);
     }, 1000);
   };
+
   useEffect(now, []);
 
-  const enterclick = (e) => {
+  const handleEnterClick = (e) => {
+
     console.log(e);
+    setShowQuestionInOut(true);
     var newStatus;
     getCurrenttime();
     if (!!!status) {
       newStatus = "login";
+      setEnterUser(true)
       setStatus("login");
     } else if (status === "logout") {
+      setEnterUser(true)
       newStatus = "login";
       setStatus("login");
     } else {
@@ -313,13 +300,15 @@ const RecordDevice = () => {
     }
   };
 
-  const outclick = (e) => {
+  const handleOutClick = (e) => {
     let newStatus;
     getCurrenttime();
-    if (!status) {
+    if (!!!status) {
+      setOutUser(true)
       newStatus = "logout";
       setStatus("logout");
     } else if (status === "login") {
+      setOutUser(true)
       newStatus = "logout";
       setStatus("logout");
     } else {
@@ -422,11 +411,11 @@ const RecordDevice = () => {
                 <div className=" mx-auto text-center">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <SwitchCase
+                      ref={loginRef}
                       name="in"
-                      control={control}
-                      onChange={enterclick}
-                      checked={!!isQuestionInOut ? false : true}
-                      value="login"
+                      onChange={handleEnterClick}
+                      checked={enterUser}
+                      value={enterUser}
                       className="sr-only peer"
                       label="ورود"
                     />
@@ -435,11 +424,10 @@ const RecordDevice = () => {
                 <div className=" mx-auto text-center  ">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <SwitchCase
-                      control={control}
                       name="out"
-                      onChange={outclick}
-                      checked={status === "logout" ? true : false}
-                      value="logout"
+                      onChange={handleOutClick}
+                      checked={outUser}
+                      value={outUser}
                       className="sr-only peer"
                       label="خروج"
                     />
@@ -486,34 +474,5 @@ const RecordDevice = () => {
     </>
   );
 };
-
-// {
-//   toastSucc.show && (
-//     <Row className="d-flex toastContainer">
-//       <Col xs="10" sm="10" xl="12" className="d-flex">
-//         <Toast
-//           bg={toastSucc.bg}
-//           onClose={() => setToastSucc({ show: false })}
-//           show={toastSucc.show}
-//           delay={3000}
-//           autohide
-//         >
-//           <Toast.Header>
-//             <strong className="justify-content-center me-auto">
-//               <i className="font20 text-danger bi bi-exclamation-triangle-fill" />
-//             </strong>
-//           </Toast.Header>
-//           <Toast.Body
-//             className={`d-flex py-4 justify-content-end ${
-//               toastSucc.bg === "warning" ? "text-dark" : "text-white"
-//             }`}
-//           >
-//             {toastSucc.title}
-//           </Toast.Body>
-//         </Toast>
-//       </Col>
-//     </Row>
-//   );
-// }
 
 export default RecordDevice;
