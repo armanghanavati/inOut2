@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Header from "./Header";
 import MyNavabar from "../components/MyNavabar/MyNavabar";
 import { Col, Collapse, Container, Row } from "react-bootstrap";
@@ -12,7 +12,13 @@ import { useMyContext } from "../components/contextProvider/MyContext";
 const PrivateLayout = ({ children }) => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
   const [showSide, setShowSide] = useState(false);
-  const { setUserRole, userLocation, setUserLocation } = useMyContext()
+  const { setUserRole, setUserLocation, setIsLocation } = useMyContext();
+
+  const handleCloseSideOnWindow = () => {
+    if (showSide) {
+      setShowSide(false);
+    }
+  };
 
   const handleUserRole = async () => {
     try {
@@ -26,40 +32,41 @@ const PrivateLayout = ({ children }) => {
           icon: "error",
         });
       }
-
     } catch (error) {
       console.log(error);
     }
   };
 
+  // const testMemo = () => {
+  //   const memo = useMemo(() => "tese", []);
+  // };
+
   const handleGetLocation = () => {
     const interval = setInterval(() => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ latitude, longitude });
-          },
-          (error) => {
-            console.error("Error getting geolocation:", error.message);
-          }
-        );
-      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setIsLocation({ latitude, longitude });
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error.message);
+        }
+      );
       return () => clearInterval(interval);
-    }, 2000);
-
-  }
+    }, 3000);
+  };
 
   useEffect(() => {
-    handleUserRole()
-    handleGetLocation()
-  }, [])
+    handleUserRole();
+    handleGetLocation();
+  }, []);
 
   return (
     <>
+      {/* <div onClick={handleCloseSideOnWindow} className=""> */}
       <Header />
       <Container fluid className="p-0">
-        <div className="d-flex justify-content-between">
+        <div className=" d-flex justify-content-between">
           {isSmallScreen && !showSide ? (
             <>
               <div className="showIcon containerSideAnimatOff sitShowSideIcon mt">
@@ -106,6 +113,7 @@ const PrivateLayout = ({ children }) => {
           </Col>
         </div>
       </Container>
+      {/* </div> */}
     </>
   );
 };

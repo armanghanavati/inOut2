@@ -19,7 +19,7 @@ const RecordDevice = () => {
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
   const [type, setType] = useState(0);
   // استیت مربوط به عرض و طول جغرافیایی
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState({longitude:0, latitude:0});
   const [showQuestionInOut, setShowQuestionInOut] = useState(false);
   const [isQuestionInOut, setIsQuestionInOut] = useState(false);
   const [enterUser, setEnterUser] = useState(false);
@@ -30,7 +30,7 @@ const RecordDevice = () => {
 
   const [currentTime, setCurrenttime] = useLocalStorageState("currenttime", "");
   const [saat, setSaat] = useState("");
-  const loginRef = useRef()
+  const loginRef = useRef();
   // تقویم شمسی
   const [persianYear, setPersianYear] = useState("");
   const [persianMonth, setPersianMonth] = useState("");
@@ -186,12 +186,12 @@ const RecordDevice = () => {
     if (enterUser) {
       setTimeout(() => {
         console.log("Hello owordl");
-        setEnterUser(false)
+        setEnterUser(false);
       }, 300);
     }
     if (outUser) {
       setTimeout(() => {
-        setOutUser(false)
+        setOutUser(false);
       }, 300);
     }
   }, [enterUser, outUser]);
@@ -215,7 +215,9 @@ const RecordDevice = () => {
     }, 1000);
   };
 
-  useEffect(() => { now() }, []);
+  useEffect(() => {
+    now();
+  }, []);
 
   const handleEnterClick = (e) => {
     setShowQuestionInOut(true);
@@ -223,10 +225,10 @@ const RecordDevice = () => {
     getCurrenttime();
     if (!!!status) {
       newStatus = "login";
-      setEnterUser(true)
+      setEnterUser(true);
       setStatus("login");
     } else if (status === "logout") {
-      setEnterUser(true)
+      setEnterUser(true);
       newStatus = "login";
       setStatus("login");
     } else {
@@ -272,11 +274,11 @@ const RecordDevice = () => {
     let newStatus;
     getCurrenttime();
     if (!!!status) {
-      setOutUser(true)
+      setOutUser(true);
       newStatus = "logout";
       setStatus("logout");
     } else if (status === "login") {
-      setOutUser(true)
+      setOutUser(true);
       newStatus = "logout";
       setStatus("logout");
     } else {
@@ -324,10 +326,10 @@ const RecordDevice = () => {
     <>
       <Container fluid>
         <Row className="d-flex text-center">
-          <p className="font-bold text-xl">{saat}</p>
-          <p>{`   ${weekday}, ${persianDay} ${monthName}`} </p>
+          {/* <p className="font-bold text-xl">{saat}</p> */}
+          <p className="mt-4" >{`   ${weekday}, ${persianDay} ${monthName}`} </p>
         </Row>
-        <hr />
+        <hr/>
         <Container fluid className="">
           <Row>
             <Col className="" md="6">

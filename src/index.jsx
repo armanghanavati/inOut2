@@ -1,5 +1,6 @@
 import Toastify from "./components2/Toastify";
 import React from "react";
+import TestParentTodo from "./TestParentTodo.js";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
@@ -15,9 +16,9 @@ root.render(
     {/* <HashRouter> */}
     <MyProvider>
       <App />
-      {/* <Toastify /> */}
     </MyProvider>
     {/* </HashRouter> */}
+    {/* <TestParentTodo /> */}
   </>
 );
 serviceWorkerRegistration.register();
@@ -38,14 +39,15 @@ serviceWorkerRegistration.register();
 //   });
 // }
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator?.serviceWorker?.register('/service-worker.js')
-      .then(registration => {
-        console.log('Service Worker registered:', registration);
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator?.serviceWorker
+      ?.register("/service-worker.js")
+      .then((registration) => {
+        console.log("Service Worker registered:", registration);
       })
-      .catch(error => {
-        console.error('Service Worker registration failed:', error);
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
       });
   });
 }

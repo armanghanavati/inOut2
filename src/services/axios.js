@@ -26,9 +26,14 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (!!!error?.config?.headers?.Authorization || error?.config?.headers?.Authorization === "Bearer null") {
-      localStorage.clear();
-      window.location = "/login";
+    if (
+      !!!error?.config?.headers?.Authorization ||
+      error?.config?.headers?.Authorization === "Bearer null"
+    ) {
+      setTimeout(() => {
+        localStorage.clear();
+        window.location = "/login";
+      }, 5000);
     }
     try {
       const expectedErrors =
