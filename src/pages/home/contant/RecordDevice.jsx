@@ -358,14 +358,14 @@ const RecordDevice = () => {
                 </div> */}
                 <div className="toggle-button-cover">
                   <div className="button r shadow" id="button-1">
-                    <input name="in" value={enterUser} checked={enterUser} onChange={handleEnterClick} type="checkbox" className="checkbox" />
+                    <input name="in" value={enterUser} checked={false} onChange={handleEnterClick} type="checkbox" className="checkbox" />
                     <div className="knobs"></div>
                     <div className="layer"></div>
                   </div>
                 </div>
                 <div className="toggle-button-cover">
                   <div className="button r shadow" id="button-3">
-                    <input name="in" value={outUser} checked={outUser} onChange={handleOutClick} type="checkbox" className="checkbox" />
+                    <input name="in" value={outUser} checked={false} onChange={handleOutClick} type="checkbox" className="checkbox" />
                     <div className="knobs"></div>
                     <div className="layer"></div>
                   </div>

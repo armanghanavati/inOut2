@@ -1687,7 +1687,7 @@ button {
 }
 
 #button-1 .checkbox:active + .knobs:before {
-  width: 46px;
+  width: 63px;
   border-radius: 100px;
 }
 
@@ -1697,6 +1697,7 @@ button {
 
 #button-1 .checkbox:checked + .knobs:before {
   /* content: "خروج"; */
+
   left: 42px;
   background-color: #03a9f4;
 }
@@ -1721,7 +1722,7 @@ button {
 }
 
 #button-3 .checkbox:active + .knobs:before {
-  width: 46px;
+  width: 63px;
   border-radius: 100px;
 }
 
