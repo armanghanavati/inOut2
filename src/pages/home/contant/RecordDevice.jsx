@@ -10,11 +10,15 @@ import { Col, Container, Row } from "react-bootstrap";
 import Entry_ExitModal from "./Entry_ExitModal";
 import MapLocation from "./MapLocation";
 import QuestionInOutModal from "./QuestionInOutModal";
+import SwitchCaseDrow from "../../../components2/SwitchCaseDrow";
+import { useMediaQuery } from "react-responsive";
+
 
 const RecordDevice = () => {
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
   const [openMod, setOpenMod] = useState(false);
   const [isLocation, setIsLocation] = useState([0, 0]);
-
+  let touchTimer;
   //   استیت استاتوس برای ورود و خروج کاربر است که یعنی ورود کرده یا خروج کرده
   const [status, setStatus] = useLocalStorageState("status", "");
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
@@ -289,6 +293,13 @@ const RecordDevice = () => {
     }
   };
 
+  const handleTouchStart = () => {
+    touchTimer = setTimeout(() => {
+      setEnterUser(true);
+      console.log('Long press detected');
+    }, 10000); // Adjust the duration as needed for your application
+  };
+
   return (
     <>
       <Container fluid>
@@ -358,14 +369,14 @@ const RecordDevice = () => {
                 </div> */}
                 <div className="toggle-button-cover">
                   <div className="button r shadow" id="button-1">
-                    <input name="in" value={enterUser} checked={false} onChange={handleEnterClick} type="checkbox" className="checkbox" />
+                    <input name="in" value={enterUser} checked={false} onClick={!isSmallScreen ? handleEnterClick : null} onTouchMove={handleEnterClick} type="checkbox" className="checkbox" />
                     <div className="knobs"></div>
                     <div className="layer"></div>
                   </div>
                 </div>
                 <div className="toggle-button-cover">
                   <div className="button r shadow" id="button-3">
-                    <input name="in" value={outUser} checked={false} onChange={handleOutClick} type="checkbox" className="checkbox" />
+                    <input name="in" value={outUser} checked={false} onClick={!isSmallScreen ? handleOutClick : null} onTouchMove={handleOutClick} type="checkbox" className="checkbox" />
                     <div className="knobs"></div>
                     <div className="layer"></div>
                   </div>

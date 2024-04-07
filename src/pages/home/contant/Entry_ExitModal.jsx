@@ -24,6 +24,9 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
               <Row className="d-flex mt-4 gap-y-3 px-5">
                 <Btn
                   xl={12}
+                  xs={12}
+                  md={12}
+                  lg={12}
                   variant="dark"
                   onClick={() => setType(0)}
                   className={
@@ -36,6 +39,9 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
                 />
                 <Btn
                   xl={12}
+                  xs={12}
+                  md={12}
+                  lg={12}
                   onClick={() => setType(1)}
                   className={
                     "border rounded-3 text-center py-2 my-2" +
@@ -47,6 +53,9 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
                 />
                 <Btn
                   xl={12}
+                  xs={12}
+                  md={12}
+                  lg={12}
                   onClick={() => setType(2)}
                   className={
                     "border rounded-3 text-center py-2 my-2" +
