@@ -30,11 +30,10 @@ export const allUserLeavesRequeset = () => {
 
 // users Summary Report Monthly
 export const usersSummaryReportMonthly = (postData) => {
-  return axios.post(`${baseURL}api/ReportController/UsersSummaryReportMonthly` ,postData);
+  return axios.post(`${baseURL}api/ReportController/UsersSummaryReportMonthly`, postData);
 };
 
 // users Summary Report Monthly
 export const createAttendancy = (postData) => {
-    console.log(postData);
-  return axios.post(`${baseURL}api/AttendanceController/CreateAttendancy` ,postData);
+  return axios.post(`${baseURL}api/AttendanceController/CreateAttendancy`, postData);
 };

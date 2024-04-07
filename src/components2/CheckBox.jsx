@@ -12,6 +12,7 @@ const SwitchCase = ({
   control,
   checkBox = false,
   defaultChecked,
+  range,
   value,
   ref
 }) => {
@@ -27,7 +28,7 @@ const SwitchCase = ({
           color="#00000"
           width={400}
           id={name}
-          type="switch"
+          type={range ? "range" : "switch"}
           checked={checked}
           onChange={onChange}
         />

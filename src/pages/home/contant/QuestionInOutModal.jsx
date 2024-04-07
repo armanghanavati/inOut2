@@ -13,7 +13,9 @@ const QuestionInOutModal = ({
   const handleCreate = async () => {
     setIsQuestionInOut(true);
     setShowQuestionInOut(false);
+    console.log(createattendance);
     const resCreate = await createAttendancy(createattendance);
+    console.log(resCreate.data.res);
     if (!resCreate.data.res) {
       Swal.fire({
         title: `${resCreate.data.msg}`,
@@ -37,7 +39,11 @@ const QuestionInOutModal = ({
       <Modal
         centered
         show={showQuestionInOut}
-        onHide={() => setShowQuestionInOut(false)}
+        onHide={() => {
+          setShowQuestionInOut(false)
+
+        }
+        }
       >
         <Modal.Header className="baseBtn text-white fw-bold"></Modal.Header>
         <Modal.Body>
@@ -48,13 +54,14 @@ const QuestionInOutModal = ({
             variant="secondary"
             onClick={() => {
               setShowQuestionInOut(false);
+
             }}
             title=" لغو"
           />
           <Btn variant="primary" onClick={handleCreate} title=" تایید" />
         </Modal.Footer>
       </Modal>
-    </div>
+    </div >
   );
 };
 

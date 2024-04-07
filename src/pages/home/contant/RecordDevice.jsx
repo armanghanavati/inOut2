@@ -13,13 +13,14 @@ import QuestionInOutModal from "./QuestionInOutModal";
 
 const RecordDevice = () => {
   const [openMod, setOpenMod] = useState(false);
+  const [isLocation, setIsLocation] = useState([0, 0]);
 
   //   استیت استاتوس برای ورود و خروج کاربر است که یعنی ورود کرده یا خروج کرده
   const [status, setStatus] = useLocalStorageState("status", "");
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
   const [type, setType] = useState(0);
   // استیت مربوط به عرض و طول جغرافیایی
-  const [location, setLocation] = useState({longitude:0, latitude:0});
+  const [location, setLocation] = useState({ longitude: 0, latitude: 0 });
   const [showQuestionInOut, setShowQuestionInOut] = useState(false);
   const [isQuestionInOut, setIsQuestionInOut] = useState(false);
   const [enterUser, setEnterUser] = useState(false);
@@ -49,13 +50,7 @@ const RecordDevice = () => {
     // دریافت طول و عرض جغرافیایی
   });
 
-  // const isInitialRender = useRef(true);
   useEffect(() => {
-    // if (isInitialRender.current) {
-    //   isInitialRender.current = false;
-    //   return;
-    // }
-
     let newCreateAttendance = { ...createattendance };
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -185,14 +180,13 @@ const RecordDevice = () => {
   useEffect(() => {
     if (enterUser) {
       setTimeout(() => {
-        console.log("Hello owordl");
         setEnterUser(false);
-      }, 300);
+      }, 110);
     }
     if (outUser) {
       setTimeout(() => {
         setOutUser(false);
-      }, 300);
+      }, 110);
     }
   }, [enterUser, outUser]);
 
@@ -222,6 +216,7 @@ const RecordDevice = () => {
   const handleEnterClick = (e) => {
     setShowQuestionInOut(true);
     var newStatus;
+    // setEnterUser(false);
     getCurrenttime();
     if (!!!status) {
       newStatus = "login";
@@ -234,20 +229,6 @@ const RecordDevice = () => {
     } else {
       newStatus = "";
       setStatus("");
-    }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
-          setCreateattendance({ ...createattendance, latitude, longitude });
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error.message);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
     }
 
     if (newStatus === "login" && type === 0) {
@@ -272,6 +253,9 @@ const RecordDevice = () => {
 
   const handleOutClick = (e) => {
     let newStatus;
+    setShowQuestionInOut(true);
+    // setEnterUser(false);
+    getCurrenttime();
     getCurrenttime();
     if (!!!status) {
       setOutUser(true);
@@ -285,23 +269,6 @@ const RecordDevice = () => {
       newStatus = "";
       setStatus("");
     }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
-          setCreateattendance({ ...createattendance, latitude, longitude });
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error.message);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-
-    // setStatus(newStatus);
-
     if (newStatus === "login" && type === 0) {
       setCreateattendance({ ...createattendance, attendanceType: 0 });
     }
@@ -329,19 +296,19 @@ const RecordDevice = () => {
           {/* <p className="font-bold text-xl">{saat}</p> */}
           <p className="mt-4" >{`   ${weekday}, ${persianDay} ${monthName}`} </p>
         </Row>
-        <hr/>
+        <hr />
         <Container fluid className="">
           <Row>
             <Col className="" md="6">
               <Col md="12">
-                <MapLocation location={location} setLocation={setLocation} />
+                <MapLocation isLocation={isLocation} setIsLocation={setIsLocation} />
               </Col>
               <Col md="12">
                 <div className="d-flex items-center justify-content-center mt-5">
-                  {location.latitude ? (
+                  {isLocation.latitude ? (
                     <div>
-                      <p>عرض جغرافیایی: {location.latitude}</p>
-                      <p>طول جغرافیایی: {location.longitude}</p>
+                      <p>عرض جغرافیایی: {isLocation.latitude}</p>
+                      <p>طول جغرافیایی: {isLocation.longitude}</p>
                     </div>
                   ) : (
                     <p></p>
@@ -350,7 +317,7 @@ const RecordDevice = () => {
               </Col>
             </Col>
             <Col className="" md="6">
-              {status && location.latitude && location.longitude ? (
+              {status && isLocation.latitude && isLocation.longitude ? (
                 <div className="mt-5 text-center text-sm  mb-4 border p-3 bg-light rounded-2 w-50 mx-auto">
                   <span className="font-bold">
                     {status === "login" && type === 0 && (
@@ -375,8 +342,8 @@ const RecordDevice = () => {
                   </span>
                 </div>
               ) : null}
-              <Col className="" md="12">
-                <div className=" mx-auto text-center">
+              <Col className="d-flex row" md="12">
+                {/* <div className=" mx-auto text-center">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <SwitchCase
                       ref={loginRef}
@@ -388,8 +355,23 @@ const RecordDevice = () => {
                       label="ورود"
                     />
                   </label>
+                </div> */}
+                <div className="toggle-button-cover">
+                  <div className="button r shadow" id="button-1">
+                    <input name="in" value={enterUser} checked={enterUser} onChange={handleEnterClick} type="checkbox" className="checkbox" />
+                    <div className="knobs"></div>
+                    <div className="layer"></div>
+                  </div>
                 </div>
-                <div className=" mx-auto text-center  ">
+                <div className="toggle-button-cover">
+                  <div className="button r shadow" id="button-3">
+                    <input name="in" value={outUser} checked={outUser} onChange={handleOutClick} type="checkbox" className="checkbox" />
+                    <div className="knobs"></div>
+                    <div className="layer"></div>
+                  </div>
+                </div>
+
+                {/* <div className=" mx-auto text-center  ">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <SwitchCase
                       name="out"
@@ -400,7 +382,7 @@ const RecordDevice = () => {
                       label="خروج"
                     />
                   </label>
-                </div>
+                </div> */}
               </Col>
               <Row className="">
                 <Col md="12" xl="12" xxl="12">

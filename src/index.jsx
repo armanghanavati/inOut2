@@ -1,6 +1,5 @@
 import Toastify from "./components2/Toastify";
 import React from "react";
-import TestParentTodo from "./TestParentTodo.js";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
@@ -18,7 +17,6 @@ root.render(
       <App />
     </MyProvider>
     {/* </HashRouter> */}
-    {/* <TestParentTodo /> */}
   </>
 );
 serviceWorkerRegistration.register();
