@@ -61,6 +61,14 @@ registerRoute(
   })
 );
 
+self.addEventListener('install', event => {
+  console.log('Service worker installed');
+});
+
+self.addEventListener('activate', event => {
+  console.log('Service worker activated');
+});
+
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
@@ -69,4 +77,27 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Any other custom service worker logic can go here.
+self.addEventListener('fetch', function (event) {
+  console.log('Fetch event:', event.request.url);
+  // Add fetch event listener if necessary
+});
+
+// Custom logic to prompt for installation
+self.addEventListener('activate', function (event) {
+  console.log('Activation event received', event);
+  event.waitUntil(
+    self.registration.showNotification('Install App?', {
+      actions: [{ action: 'install', title: 'نصب' }],
+      body: 'آیا تمایل دارید این اپلیکیشن را نصب کنید؟',
+    })
+  );
+});
+
+self.addEventListener('notificationclick', function (event) {
+  if (event.action === 'install') {
+    event.waitUntil(
+      self.skipWaiting(), // Activate the waiting service worker
+      // Add installation logic here
+    );
+  }
+});

@@ -8,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { MyProvider } from "./components/contextProvider/MyContext";
 import "mapir-react-component/dist/index.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import * as serviceWorker from "./service-worker";
+importScripts('./service-worker.js');
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -20,6 +22,8 @@ root.render(
   </>
 );
 serviceWorkerRegistration.register();
+
+<script src="./service-worker.js" />
 
 // if ("serviceWorker" in navigator) {
 //   window.addEventListener("load", () => {

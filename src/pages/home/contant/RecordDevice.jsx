@@ -267,7 +267,7 @@ const RecordDevice = () => {
               <Col className="d-flex row" md="12">
                 <div className="toggle-button-cover d-flex">
                   <div className="button r shadow" id="button-1">
-                    <input name="in" value={enterUser} checked={false} onClick={handleEnterClick} onTouchMove={handleEnterClick} type="checkbox" className="checkbox" />
+                    <input name="in" value={enterUser} checked={false} onClick={!isSmallScreen ? handleEnterClick : null} onTouchMove={handleEnterClick} type="checkbox" className="checkbox" />
                     <div className="knobs">
                       <span className="d-flex font12 fw-bold bg-white text-start text-secondary justify-content-start me-2 mt-1" >
                         {titleSwitch?.in}
@@ -281,7 +281,7 @@ const RecordDevice = () => {
                     <input name="in" value={outUser} checked={false} onClick={!isSmallScreen ? handleOutClick : null} onTouchMove={handleOutClick} type="checkbox" className="checkbox" />
                     <div className="knobs">
                       <span className="d-flex font12 fw-bold bg-white text-start text-secondary justify-content-start me-2 mt-1" >
-                        {titleSwitch?.in}
+                        {titleSwitch?.out}
                       </span>
                     </div>
                     <div className="layer"></div>

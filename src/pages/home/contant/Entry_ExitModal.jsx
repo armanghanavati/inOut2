@@ -68,7 +68,11 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType, setTitleSwitch })
                   xs={12}
                   md={12}
                   lg={12}
-                  onClick={() => setType(2)}
+                  onClick={() => {
+                    setTitleSwitch({ in: "ورود با ماموریت", out: "خروج با ماموریت" })
+                    setType(2)
+                  }
+                  }
                   className={
                     "border rounded-3 text-center py-2 my-2" +
                     (type == 2

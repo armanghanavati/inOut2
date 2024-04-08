@@ -60,7 +60,7 @@ const Login = () => {
         localStorage.setItem("tokenId", res?.data?.jwtToken);
         localStorage.setItem("userRole", res?.data?.userRole);
         navigate("/user/home");
-      }else {
+      } else {
         Swal.fire({
           text: res?.data?.err,
           icon: "error",
