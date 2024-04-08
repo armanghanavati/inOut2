@@ -330,6 +330,10 @@ br {
   font-size: 8px !important;
 }
 
+.font10 {
+  font-size: 10px !important;
+}
+
 .font11 {
   font-size: 11px !important;
 }
@@ -1635,8 +1639,8 @@ button {
 .button {
   position: relative;
   top: 50%;
-  width: 74px;
-  height: 36px;
+  height: 30px;
+  width: 100px;
   margin: -20px auto 0 auto;
   overflow: hidden;
 }
@@ -1658,7 +1662,7 @@ button {
 
 .layer {
   width: 100%;
-  background-color: #ebf7fc;
+  background-color: white;
   transition: 0.3s ease all;
   z-index: 1;
 }
@@ -1669,60 +1673,61 @@ button {
 }
 
 #button-1 .knobs:before {
-  content: "ورود";
+  content: "<";
+  /* content: "ورود"; */
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 26px;
-  height: 27px;
+  top: 0px;
+  left: 0px;
+  width: 30px;
+  height: 30px;
   color: #fff;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center;
   line-height: 1;
   padding: 9px 4px;
-  background-color: #03a9f4;
+  background-color: #03a8f465;
   border-radius: 50%;
   transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
 }
 
 #button-1 .checkbox:active + .knobs:before {
-  width: 63px;
+  width: 100px;
   border-radius: 100px;
 }
 
 #button-1 .checkbox:checked:active + .knobs:before {
   margin-left: -26px;
+  background-color: #03a8f4;
 }
 
 #button-1 .checkbox:checked + .knobs:before {
   /* content: "خروج"; */
-
   left: 42px;
-  background-color: #03a9f4;
+  background-color: #03a8f4;
 }
 
 #button-3 .knobs:before {
-  content: "خروج";
+  content: "<";
+  /* content: "ورود"; */
   position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 29px;
-  height: 27px;
+  top: 0px;
+  left: 0px;
+  width: 30px;
+  height: 30px;
   color: #fff;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center;
   line-height: 1;
   padding: 9px 4px;
-  background-color: #f44336;
-
+  background-color: #f4433667;
   border-radius: 50%;
   transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
 }
 
 #button-3 .checkbox:active + .knobs:before {
-  width: 63px;
+  width: 100px;
   border-radius: 100px;
 }
 
@@ -1732,7 +1737,7 @@ button {
 
 #button-3 .checkbox:checked + .knobs:before {
   left: 42px;
-  background-color: #f44336;
+  background-color: #f4433667;
 }
 
 #button-3 .checkbox:checked ~ .layer {

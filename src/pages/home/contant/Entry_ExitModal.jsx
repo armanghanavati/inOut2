@@ -2,13 +2,17 @@ import Button from "react-bootstrap/Button";
 import { Row, Modal, Container } from "react-bootstrap";
 import Btn from "../../../components2/Btn";
 
-const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
+const Entry_ExitModal = ({ openMod, setOpenMod, type, setType, setTitleSwitch }) => {
   return (
     <div
       className="modal show"
       style={{ display: "block", position: "initial" }}
     >
-      <Modal show={openMod} onHide={() => setOpenMod(false)}>
+      <Modal show={openMod} onHide={() => {
+        setTitleSwitch({})
+        setOpenMod(false)
+      }
+      }>
         <Modal.Header className="baseBtn text-white fw-bold">
           <Modal.Title>نوع ورود و خروج</Modal.Title>
         </Modal.Header>
@@ -28,7 +32,11 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
                   md={12}
                   lg={12}
                   variant="dark"
-                  onClick={() => setType(0)}
+                  onClick={() => {
+                    setTitleSwitch({ in: "ورود", out: "خروج" })
+                    setType(0)
+                  }
+                  }
                   className={
                     "border rounded-3 text-center py-2 my-2" +
                     (!type
@@ -42,7 +50,11 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
                   xs={12}
                   md={12}
                   lg={12}
-                  onClick={() => setType(1)}
+                  onClick={() => {
+                    setType(1)
+                    setTitleSwitch({ in: "ورود با مرخصی", out: "خروج با مرخصی" })
+                  }
+                  }
                   className={
                     "border rounded-3 text-center py-2 my-2" +
                     (type == 1
@@ -74,6 +86,7 @@ const Entry_ExitModal = ({ openMod, setOpenMod, type, setType }) => {
             variant="secondary"
             onClick={() => {
               setOpenMod(false);
+              setTitleSwitch({})
               setType(0);
             }}
             title=" لغو"

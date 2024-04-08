@@ -13,12 +13,11 @@ import QuestionInOutModal from "./QuestionInOutModal";
 import SwitchCaseDrow from "../../../components2/SwitchCaseDrow";
 import { useMediaQuery } from "react-responsive";
 
-
 const RecordDevice = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
   const [openMod, setOpenMod] = useState(false);
   const [isLocation, setIsLocation] = useState([0, 0]);
-  let touchTimer;
+  const [titleSwitch, setTitleSwitch] = useState({ in: "ورود", out: "خروج" })
   //   استیت استاتوس برای ورود و خروج کاربر است که یعنی ورود کرده یا خروج کرده
   const [status, setStatus] = useLocalStorageState("status", "");
   // استیت تایپ برای نوع ورود خروج است که یعنی ورود خروخ معمولی بوده یا با مرخصی یا با ماموریت
@@ -31,12 +30,10 @@ const RecordDevice = () => {
   const [outUser, setOutUser] = useState(false);
 
   // استیت مربوط به نوع ورود و خروج
-  // const[attendancetype,setAttendancetype]=useState(0)
+  // const [attendancetype, setAttendancetype] = useState(0)
 
   const [currentTime, setCurrenttime] = useLocalStorageState("currenttime", "");
   const [saat, setSaat] = useState("");
-  const loginRef = useRef();
-  // تقویم شمسی
   const [persianYear, setPersianYear] = useState("");
   const [persianMonth, setPersianMonth] = useState("");
   const [persianDay, setPersianDay] = useState("");
@@ -44,92 +41,12 @@ const RecordDevice = () => {
   const [weekday, setWeekday] = useState("");
   const [monthName, setMonthName] = useState("");
 
-  //
   const [userData, setUserData] = useLocalStorageState("userData", "");
   // state for createattendance
   const [createattendance, setCreateattendance] = useState({
     attendanceType: `${type}`,
-    latitude: 0,
-    longitude: 0,
-    // دریافت طول و عرض جغرافیایی
   });
-
-  useEffect(() => {
-    let newCreateAttendance = { ...createattendance };
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation({ latitude, longitude });
-          newCreateAttendance = {
-            ...newCreateAttendance,
-            latitude,
-            longitude,
-          };
-          setCreateattendance(newCreateAttendance);
-        },
-        (error) => {
-          Swal.fire({
-            title: "Error getting geolocation",
-            text: `${error.message}`,
-            icon: "error",
-          });
-        }
-      );
-    } else {
-      Swal.fire({
-        title: "موقعیت شما یافت نشد",
-        icon: "error",
-      });
-    }
-    // Swal.fire({
-    //   title: "ایا میخواهید ورود خروج خودرا ثبت کنید؟",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#d33",
-    //   confirmButtonText: "آری!",
-    //   cancelButtonText: "خیر",
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     const token = JSON.parse(localStorage.getItem("token"));
-    //     const headers = {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Bearer " + token,
-    //     };
-    //     axios
-    //       .post(
-    //         "https://auto.fanwebco.com/InOut_api/api/AttendanceController/CreateAttendancy",
-    //         newCreateAttendance,
-    //         { headers: headers }
-    //       )
-    //       .then((res) =>
-    //         !res.data.res
-    //           ? Swal.fire({
-    //               title: `${res.data.msg}`,
-    //               text: "ورود یا خروج شما ثبت نشد",
-    //               icon: "error",
-    //             })
-    //           : Swal.fire({
-    //               // title:`${res.data.msg}`,
-    //               title: "ورود یا خروج شما ثبت شد",
-    //               icon: "success",
-    //             })
-    //       )
-    //       .catch((err) =>
-    //         Swal.fire({
-    //           text: `${err.message}`,
-    //           icon: "error",
-    //         })
-    //       );
-    //   } else {
-    //     Swal.fire({
-    //       title: "ورود خروج شما ثبت نشد",
-    //       icon: "error",
-    //     });
-    //   }
-    // });
-  }, [status]);
+  // let newCreateAttendance = { ...createattendance };
 
   useEffect(() => {
     if (status === "login" && type === 0) {
@@ -218,6 +135,8 @@ const RecordDevice = () => {
   }, []);
 
   const handleEnterClick = (e) => {
+    console.log(e?.movementX);
+    // console.log('Touch moved:', e.touches[0].clientX, e.touches[0].clientY);
     setShowQuestionInOut(true);
     var newStatus;
     // setEnterUser(false);
@@ -234,7 +153,6 @@ const RecordDevice = () => {
       newStatus = "";
       setStatus("");
     }
-
     if (newStatus === "login" && type === 0) {
       setCreateattendance({ ...createattendance, attendanceType: 0 });
     }
@@ -293,13 +211,6 @@ const RecordDevice = () => {
     }
   };
 
-  const handleTouchStart = () => {
-    touchTimer = setTimeout(() => {
-      setEnterUser(true);
-      console.log('Long press detected');
-    }, 10000); // Adjust the duration as needed for your application
-  };
-
   return (
     <>
       <Container fluid>
@@ -314,21 +225,21 @@ const RecordDevice = () => {
               <Col md="12">
                 <MapLocation isLocation={isLocation} setIsLocation={setIsLocation} />
               </Col>
-              <Col md="12">
+              {/* <Col md="12">
                 <div className="d-flex items-center justify-content-center mt-5">
-                  {isLocation.latitude ? (
+                  {!!isLocation?.[0] ? (
                     <div>
-                      <p>عرض جغرافیایی: {isLocation.latitude}</p>
-                      <p>طول جغرافیایی: {isLocation.longitude}</p>
+                      <p>عرض جغرافیایی: {isLocation?.[0]}</p>
+                      <p>طول جغرافیایی: {isLocation?.[1]}</p>
                     </div>
                   ) : (
                     <p></p>
                   )}
                 </div>
-              </Col>
+              </Col> */}
             </Col>
             <Col className="" md="6">
-              {status && isLocation.latitude && isLocation.longitude ? (
+              {status && isLocation?.latitude && isLocation?.longitude ? (
                 <div className="mt-5 text-center text-sm  mb-4 border p-3 bg-light rounded-2 w-50 mx-auto">
                   <span className="font-bold">
                     {status === "login" && type === 0 && (
@@ -354,46 +265,28 @@ const RecordDevice = () => {
                 </div>
               ) : null}
               <Col className="d-flex row" md="12">
-                {/* <div className=" mx-auto text-center">
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <SwitchCase
-                      ref={loginRef}
-                      name="in"
-                      onChange={handleEnterClick}
-                      checked={enterUser}
-                      value={enterUser}
-                      className="sr-only peer"
-                      label="ورود"
-                    />
-                  </label>
-                </div> */}
-                <div className="toggle-button-cover">
+                <div className="toggle-button-cover d-flex">
                   <div className="button r shadow" id="button-1">
-                    <input name="in" value={enterUser} checked={false} onClick={!isSmallScreen ? handleEnterClick : null} onTouchMove={handleEnterClick} type="checkbox" className="checkbox" />
-                    <div className="knobs"></div>
+                    <input name="in" value={enterUser} checked={false} onClick={handleEnterClick} onTouchMove={handleEnterClick} type="checkbox" className="checkbox" />
+                    <div className="knobs">
+                      <span className="d-flex font12 fw-bold bg-white text-start text-secondary justify-content-start me-2 mt-1" >
+                        {titleSwitch?.in}
+                      </span>
+                    </div>
                     <div className="layer"></div>
                   </div>
                 </div>
                 <div className="toggle-button-cover">
                   <div className="button r shadow" id="button-3">
                     <input name="in" value={outUser} checked={false} onClick={!isSmallScreen ? handleOutClick : null} onTouchMove={handleOutClick} type="checkbox" className="checkbox" />
-                    <div className="knobs"></div>
+                    <div className="knobs">
+                      <span className="d-flex font12 fw-bold bg-white text-start text-secondary justify-content-start me-2 mt-1" >
+                        {titleSwitch?.in}
+                      </span>
+                    </div>
                     <div className="layer"></div>
                   </div>
                 </div>
-
-                {/* <div className=" mx-auto text-center  ">
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <SwitchCase
-                      name="out"
-                      onChange={handleOutClick}
-                      checked={outUser}
-                      value={outUser}
-                      className="sr-only peer"
-                      label="خروج"
-                    />
-                  </label>
-                </div> */}
               </Col>
               <Row className="">
                 <Col md="12" xl="12" xxl="12">
@@ -418,6 +311,7 @@ const RecordDevice = () => {
       ></div>
       {openMod && (
         <Entry_ExitModal
+          setTitleSwitch={setTitleSwitch}
           type={type}
           setType={setType}
           openMod={openMod}
@@ -426,6 +320,7 @@ const RecordDevice = () => {
       )}
       {showQuestionInOut && (
         <QuestionInOutModal
+          isLocation={isLocation}
           setIsQuestionInOut={setIsQuestionInOut}
           createattendance={createattendance}
           showQuestionInOut={showQuestionInOut}

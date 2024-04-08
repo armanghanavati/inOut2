@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 const QuestionInOutModal = ({
   showQuestionInOut,
+  isLocation,
   createattendance,
   setIsQuestionInOut,
   setShowQuestionInOut,
@@ -13,9 +14,14 @@ const QuestionInOutModal = ({
   const handleCreate = async () => {
     setIsQuestionInOut(true);
     setShowQuestionInOut(false);
-    console.log(createattendance);
-    const resCreate = await createAttendancy(createattendance);
-    console.log(resCreate.data.res);
+    // setIsLocation([longitude, latitude]);
+    const postData = {
+      attendanceType: createattendance?.attendanceType,
+      longitude: isLocation?.[0],
+      latitude: isLocation?.[1]
+    }
+    const resCreate = await createAttendancy(postData);
+
     if (!resCreate.data.res) {
       Swal.fire({
         title: `${resCreate.data.msg}`,
