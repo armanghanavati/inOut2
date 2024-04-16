@@ -21,9 +21,6 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 precacheAndRoute(self.__WB_MANIFEST);
 
-// Set up App Shell-style routing, so that all navigation requests
-// are fulfilled with your index.html shell. Learn more at
-// https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
 registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
@@ -46,11 +43,8 @@ registerRoute(
   createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html')
 );
 
-// An example runtime caching route for requests that aren't handled by the
-// precache, in this case same-origin .png requests like those from in public/
 registerRoute(
-  // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'),
   new StaleWhileRevalidate({
     cacheName: 'images',
     plugins: [
@@ -61,12 +55,25 @@ registerRoute(
   })
 );
 
-self.addEventListener('install', event => {
-  console.log('Service worker installed');
+// self.addEventListener('install', event => {
+//   console.log('Service worker installed', event);
+// });
+self.addEventListener("install", (event) => {
+  console.log("install app", event)
+  event.waitUntil(
+    caches.open("my-cache").then((cache) => {
+      return cache.addAll([
+        "/",
+        "/index.html",
+        "/manifest.json",
+        // Add other static assets and routes you want to cache
+      ]);
+    })
+  );
 });
 
 self.addEventListener('activate', event => {
-  console.log('Service worker activated');
+  console.log('Service worker activated', event);
 });
 
 // This allows the web app to trigger skipWaiting via
@@ -101,3 +108,4 @@ self.addEventListener('notificationclick', function (event) {
     );
   }
 });
+

@@ -8,8 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { MyProvider } from "./components/contextProvider/MyContext";
 import "mapir-react-component/dist/index.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import * as serviceWorker from "./service-worker";
-importScripts('./service-worker.js');
+// importScripts('./service-worker.js');
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -23,23 +22,7 @@ root.render(
 );
 serviceWorkerRegistration.register();
 
-<script src="./service-worker.js" />
-
-// if ("serviceWorker" in navigator) {
-//   window.addEventListener("load", () => {
-//     navigator.serviceWorker
-//       .register("/service-worker.js")
-//       .then((registration) => {
-//         console.log(
-//           "Service Worker registered with scope:",
-//           registration.scope
-//         );
-//       })
-//       .catch((error) => {
-//         console.error("Service Worker registration failed:", error);
-//       });
-//   });
-// }
+{/* <script src="./service-worker.js" /> */ }
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
